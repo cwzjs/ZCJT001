@@ -1,0 +1,139 @@
+﻿ 
+@using ZCJT.Web;
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@{
+    ViewBag.Title = "主页";
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+
+<div class="mvctool"> 
+    <form id="ddcxt-listquery-from">
+        <table>
+            <tr>
+                <td>日期：</td>
+                <td>
+                    <input type="text" id="ddcxt-businessdatestart" name="businessdatestart" style="width:100px;" class="easyui-validatebox" required="true" onfocus="WdatePicker({'dateFmt':'yyyy-MM-dd'})" /> 到
+                    <input type="text" id="ddcxt-businessdateend" name="businessdateend" class="easyui-validatebox" required="true" style="width:100px;" onfocus="WdatePicker({'dateFmt':'yyyy-MM-dd'})" />
+                </td>
+                <td>物料类别：</td>
+                <td><input id="ddcxt-list-form-wllb" name="wllb" type="text" class="searchText" /></td>
+                <td>
+                    @Html.ToolButton("btnQuery", "icon-search", "查询", true)
+                    @Html.ToolButton("btnQueryReset", "icon-reload", "重置", true)
+                    @Html.ToolButton("btnExport", "icon-export", "导出", true)
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<table id="List"></table>
+<div id="modalwindow" class="easyui-window" data-options="modal:true,closed:true,minimizable:false,shadow:false"></div>
+@Html.Partial("~/Views/Shared/_Partial_AutoGrid.cshtml")
+<script type="text/javascript">
+    $(function () {
+        $('#List').datagrid({
+            //url: '@Url.Action("GetWLZD")',//把这个里删除 或者注释掉
+            width: $(window).width() - 10,
+            methord: 'post',
+            height: $(window).height() - 35,
+            fitColumns: true,
+            sortName: 'lswlzd_wlbh',
+            sortOrder: 'desc',
+            idField: 'lswlzd_wlbh',
+            pageSize: 50,
+            // pageList: [15, 20, 30, 40, 50],
+            pagination: true,
+            striped: true, //奇偶行是否区分
+            singleSelect: true,//单选模式
+            rownumbers: true,//行号
+            columns: [[
+                { field: 'lswlzd_wlbh', title: '物料编号', width: 80, sortable: true },
+                { field: 'lswlzd_wlmc', title: '物料名称', width: 80, sortable: true },
+                { field: 'lswlzd_ggxh', title: '规格型号', width: 80, sortable: true },
+                { field: 'lswlzd_lbbh', title: '类别编号', width: 80, sortable: true },
+                { field: 'lswllb_lbmc', title: '类别名称', width: 80, sortable: true }
+            ]]
+        });
+
+        $("#ddcxt-list-form-wllb").combogrid({
+            panelWidth: 450,
+            method: 'post',
+            idField: 'lswlzd_wlbh',
+            textField: 'lswlzd_wlmc',
+            url: '@Url.Action("GetWLZD")',
+            pagination: true,//是否分页
+            rownumbers: true,//序号
+            columns: [[
+                { field: 'lswlzd_wlbh', title: '物料编号', width: 80 },
+                { field: 'lswlzd_wlmc', title: '物料名称', width: 80 },
+                { field: 'lswlzd_ggxh', title: '规格型号', width: 80 },
+                { field: 'lswlzd_lbbh', title: '类别编号', width: 80 },
+                { field: 'lswllb_lbmc', title: '类别名称', width: 80 }
+            ]]
+        });
+    });
+    //ifram 返回
+    function frameReturnByClose() {
+        $("#modalwindow").window('close');
+    }
+    function frameReturnByReload(flag) {
+        if (flag)
+            $("#List").datagrid('load');
+        else
+            $("#List").datagrid('reload');
+    }
+    function frameReturnByMes(mes) {
+        $.messageBox5s('提示', mes);
+    }
+    $(function () {
+        $("#btnExport").click(function () {
+            $("#modalwindow").html("<iframe width='100%' height='98%' scrolling='no' frameborder='0'' src='/SysHelper/ReportControl'></iframe>");
+            $("#modalwindow").window({ title: '导出', width: 320, height: 200, iconCls: 'icon-add' }).window('open');
+        });
+
+
+        $("#btnQuery").click(function () {
+           
+            //序列化成object
+            var queryJSON = $("#ddcxt-listquery-from").serializeJSON();
+            //$("#List").datagrid('load', queryJSON);
+            $("#List").datagrid({
+                url: '@Url.Action("GetWLZD")',
+                pageNumber: 1,
+                queryParams: queryJSON
+            });
+
+        });
+
+        $("#btnQueryReset").click(function () {
+            //后加载的话，重置使用重置方法二
+
+            //方法一   
+            //$("#ddcxt-listquery-from").form("reset");
+            //方法二   
+            $("#ddcxt-listquery-from")[0].reset();
+
+            //重置方法一
+            //重置方法一 开始
+            //var queryJSON = $("#ddcxt-listquery-from").serializeJSON();
+            //$("#List").datagrid('load', queryJSON);
+            //重置方法一 结束
+
+            //重置方法二 
+            $("#List").datagrid('loadData', { total: 0, rows: [] });
+
+        });
+
+        //查询时，注册回车事件 ALT+Q 查询，ALT+R 重置
+        controlQueryAndResetByKey("btnQuery", "btnQueryReset");
+
+    });
+</script>
+
+ 

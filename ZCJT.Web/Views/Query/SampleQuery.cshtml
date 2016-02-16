@@ -1,0 +1,103 @@
+﻿@using ZCJT.Web;
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@{
+    ViewBag.Title = "主页";
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+<div class="mvctool">
+    <label>开始时间：</label>
+    <input id="startDate" class="easyui-datebox"/>
+    <label>结束时间：</label>
+    <input id="endDate" class="easyui-datebox" />
+    <label>姓名：</label>
+    <select id="name" class="easyui-combogrid" style="width:200px" data-options="
+			panelWidth: 200,
+			idField: 'Name',
+			textField: 'Age',
+			url: 'GetNameComboxData',
+			method: 'get',
+			columns: [[
+				{field:'Name',title:'姓名',width:50},
+				{field:'Age',title:'年龄',width:80}
+			]],
+			fitColumns: true
+		"></select>
+    @Html.ToolButton("btnQuery","icon-search", "查询"  , true)
+    @*@Html.ToolButton("btnDetails", "icon-details", "详细", true)*@
+</div>
+<table id="List"></table>
+<div id="modalwindow" class="easyui-window" data-options="modal:true,closed:true,minimizable:false,shadow:false"></div>
+@Html.Partial("~/Views/Shared/_Partial_AutoGrid.cshtml")
+<script type="text/javascript">
+    $(function() {
+        $('#List').datagrid({
+            url: '@Url.Action("GetSampleList")',
+            width: $(window).width() - 10,
+            methord: 'post',
+            height: $(window).height() - 35,
+            fitColumns: true,
+            sortName: 'CreateTime',
+            sortOrder: 'desc',
+            idField: 'Id',
+            pageSize: 15,
+            pageList: [15, 20, 30, 40, 50],
+            pagination: true,
+            striped: true, //奇偶行是否区分
+            singleSelect: true,//单选模式
+            //rownumbers: true,//行号
+            columns: [[
+                { field: 'Id', title: '', width: 80,hidden:true },
+                { field: 'Name', title: '姓名', width: 80,sortable:true },
+                { field: 'Age', title: '年龄', width: 80,sortable:true },
+                { field: 'Bir', title: '生日', width: 80,sortable:true },
+                { field: 'Note', title: '备注', width: 80,sortable:true },
+                { field: 'CreateTime', title: '创建时间', width: 80, sortable: false }
+            ]]
+        });
+    });
+    //ifram 返回
+    function frameReturnByClose() {
+        $("#modalwindow").window('close');
+    }
+    function frameReturnByReload(flag) {
+        if (flag)
+            $("#List").datagrid('load');
+        else
+            $("#List").datagrid('reload');
+    }
+    function frameReturnByMes(mes) {
+        $.show_alert('提示', mes);
+    }
+    $(function () {
+        $("#btnExport").click(function () {
+            $("#modalwindow").html("<iframe width='100%' height='98%' scrolling='no' frameborder='0'' src='/SysHelper/ReportControl'></iframe>");
+            $("#modalwindow").window({ title: '导出', width: 320, height: 200, iconCls: 'icon-add' }).window('open');
+        });
+
+        $("#btnDetails").click(function () {
+            var row = $('#List').datagrid('getSelected');
+            if (row != null) {
+                $("#modalwindow").html("<iframe width='100%' height='98%' scrolling='no' frameborder='0' src='/SysUser/Details?id=" + row.Id + "&Ieguid=" + GetGuid() + "'></iframe>");
+                $("#modalwindow").window({ title: '详细', width: 500, height: 300, iconCls: 'icon-details' }).window('open');
+            } else { $.show_alert('提示', '@Suggestion.PlaseChooseToOperatingRecords'); }
+	        });
+        $("#btnQuery").click(function () {
+            debugger;
+            var startDate = $("#startDate").datebox('getValue');
+            var endDate = $("#endDate").datebox('getValue');
+            var Name = $('#name').combogrid('getValue');
+
+            $('#List').datagrid({
+                url: '@Url.Action("GetSampleList")?startDate=' + encodeURI(startDate) + "&endDate=" + encodeURI(endDate) + "&name=" + encodeURI(Name)
+            });
+
+        });
+      
+    });
+</script>

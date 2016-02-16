@@ -1,0 +1,83 @@
+﻿@model ZCJT.Models.Sys.SysUserModel
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@using ZCJT.Web;
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_Index_LayoutEdit.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+<script type="text/javascript">
+    $(function () {
+        $("#btnSave").click(function () {
+            var oldPwd = $("#oldPwd").val();
+            var newPwd = $("#newPwd").val();
+            if (oldPwd == "") {
+                $("#info").html("原密码不能为空！");
+                return;
+            }
+            if (newPwd == "") {
+                $("#info").html("新密码不能为空！");
+                return;
+            }
+            if (oldPwd == newPwd)
+            {
+                $("#info").html("新密码不能重复！");
+                return;
+            }
+            $("#info").html("");
+            $.ajax({
+                url: "@Url.Action("UpdatePwdSet")",
+                type: "Post",
+                data: { oldPwd: $("#oldPwd").val(), newPwd: $("#newPwd").val() },
+                dataType: "json",
+                success: function (data) {
+                    debugger;
+                    if (data.type == 1) {
+                        window.parent.frameReturnByMes(data.message);
+                        window.parent.frameReturnByClose();
+                    }
+                    else {
+                        $("#info").html(data.message);
+                    }
+                }
+            });
+        });
+        $("#btnReturn").click(function () {
+            window.parent.frameReturnByClose();
+        });
+    });
+</script>
+<div class="mvctool bgb">
+    @Html.ToolButton("btnSave", "icon-save", "保存",  false)
+    @Html.ToolButton("btnReturn", "icon-return", "返回", false)
+</div>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    <table class="fromEditTable setTextWidth300">
+        <tbody>
+            <tr>
+                <td style="width:50px; text-align:right;">
+                    <label for="">原密码：</label>
+                </td>
+                <td style="width:150px">
+                    <input id="oldPwd" type="password">
+                </td>
+            </tr>
+            <tr>
+                <td style="width:50px; text-align:right;">
+                    <label>新密码：</label>
+                </td>
+                <td style="width:150px">
+                    <input id="newPwd" type="password">
+                </td>
+            </tr>
+            <tr><td colspan="2"><label id="info" style="color:red;align-content:center;"></label></td></tr>
+        </tbody>
+    </table>
+}

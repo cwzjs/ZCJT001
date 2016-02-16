@@ -1,0 +1,164 @@
+﻿@model ZCJT.Models.Sys.SysModuleModel
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@using ZCJT.Web;
+@{
+    ViewBag.Title = "修改";
+    Layout = "~/Views/Shared/_Index_LayoutEdit.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+
+@*弹出层*@
+<script src="~/Scripts/popup_layer.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSave").click(function () {
+            if ($("form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Edit")",
+                    type: "Post",
+                    data: $("form").serialize(),
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.type == 1) {
+                            window.parent.frameReturnByMes(data.message);
+                            window.parent.frameReturnByReload(true);
+                            window.parent.frameReturnByClose()
+                        }
+                        else {
+                            window.parent.frameReturnByMes(data.message);
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+        $("#btnReturn").click(function () {
+            window.parent.frameReturnByClose();
+        });
+    
+    });
+</script>
+<script type="text/javascript">
+    jQuery(document).ready(function($) {
+        //示例1，默认弹出层
+        new PopupLayer({ trigger: "#Atrigger", popupBlk: "#blk",closeBtn:"#Aclose"});
+        
+        
+        $("#Atrigger").linkbutton({
+            iconCls: $("#Iconic").val()==""?"pic_1":$("#Iconic").val()
+    });
+    });
+    
+    //选择图标
+    function SetIconic(currentIcon) {
+        $("#Atrigger").linkbutton({ 
+            iconCls: currentIcon 
+        });
+        $("#Iconic").val(currentIcon);
+        document.getElementById("Aclose").click();
+        //$("#close1").trigger(click); 不起作用
+    }
+</script>
+
+<div class="mvctool bgb">
+    @Html.ToolButton("btnSave", "icon-save", "保存", perm, "Save", true)
+    @Html.ToolButton("btnReturn", "icon-return", "返回", false)
+</div>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.CreateTime)
+    @Html.HiddenFor(model => model.CreatePerson)
+    @Html.HiddenFor(model => model.Iconic)
+    <table class="fromEditTable setTextWidth300">
+        <tbody>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Name)：
+                </td>
+                <td style="width:310px">
+                    @Html.EditorFor(model => model.Name)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Name)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.ParentId)：
+                </td>
+                <td style="width:310px">
+                    @Html.EditorFor(model => model.ParentId)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.ParentId)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Url)：
+                </td>
+                <td style="width:310px">
+                    @Html.EditorFor(model => model.Url)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Url)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Iconic)：
+                </td>
+                <td style="width:310px">
+                    <a id="Atrigger" class="easyui-linkbutton" data-options="plain:true,iconCls:'pic_1'"></a>
+                    <div style="padding:5px;border:1px solid #ddd;display:none;background:#fff;width: 400px;height: 200px;overflow-y:auto;" id="blk">
+                        <a href="javascript:void(0)" id="Aclose" style="display: none">关闭</a>
+                        @for (int i = 1; i < 470; i++)
+                        {
+                            <a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'pic_@i'" onclick="SetIconic('pic_@i')"></a>
+                        }
+                    </div>
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Iconic)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Sort)：
+                </td>
+                <td style="width:310px">
+                    @Html.EditorFor(model => model.Sort)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Sort)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Remark)：
+                </td>
+                <td style="width:310px">
+                    @Html.EditorFor(model => model.Remark)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Remark)</td>
+            </tr>
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.Enable)：
+                </td>
+                <td style="width:310px">
+                    @Html.CheckBoxFor(model => model.Enable)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Enable)</td>
+            </tr>
+
+            <tr>
+                <td style="width:100px; text-align:right;">
+                    @Html.LabelFor(model => model.IsLast)：
+                </td>
+                <td style="width:310px">
+                    @Html.CheckBoxFor(model => model.IsLast)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.IsLast)</td>
+            </tr>
+
+        </tbody>
+    </table>
+}

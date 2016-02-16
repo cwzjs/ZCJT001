@@ -1,0 +1,129 @@
+﻿@{
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>控制台</title>
+    <meta name="viewport" content="width=device-width" />
+    <script src="@Url.Content("~/Scripts/jquery.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.easyui.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.cookies.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/easyui/locale/easyui-lang-zh_CN.js")" type="text/javascript"></script>
+ 
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.easyui.plus.js")" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.tree.js"></script>
+    @*<script src="~/Scripts/home.js"></script>*@
+    <link href="~/Content/tree/css/tree.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @* @Styles.Render("~/Content/themes/blue/css")*@
+    <link id="easyuiTheme" href="~/Content/themes/blue/easyui.css" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/bundles/home")
+    <script>
+     
+        
+         //function ChangSckin() {
+         //    $.messager.show({
+         //        title: '主题选择',
+         //        msg: '<div id="menu" class="easyui-menu" style="width:120px;"><div onclick="changeThemeFun("gray")" >Gray</div><div onclick="changeThemeFun("blac")" >Black</div><div onclick="changeThemeFun("default")" >Default</div></div>',
+         //        showType: 'fade',
+         //        height:150,
+         //        width:200,
+         //        style: {
+         //            left: 0,
+         //            top: '',
+         //            bottom: -document.body.scrollTop - document.documentElement.scrollTop+20
+         //        }
+         //    });
+         //}
+
+         $(function () {
+             $("#UpdatePwd").click(function () {
+                 //debugger;
+               $("#popupwindow").html("<iframe width='100%' height='99%'  frameborder='0' src='/SysUser/UpdatePwd?Ieguid=" + GetGuid() + "'></iframe>");
+              // $("#popupwindow").window({ title: '修改密码', width: 400, height: 250, iconCls: 'icon-edit' }).window('open');
+               $("#popupwindow").dialog({ title: '修改密码', width: 400, height: 250, iconCls: 'icon-edit' }).window('open');
+               
+             }
+             );
+         });
+         function frameReturnByClose() {
+             $("#popupwindow").window('close');
+         }
+         function frameReturnByMes(mes) {
+             $.show_alert('提示', mes);
+         }
+    </script>
+</head>
+<body class="easyui-layout">
+    <div id="OverTimeLogin" class="easyui-dialog" data-options="closed:true,modal:true">
+        <iframe width="726px" scrolling="no" height="497px" frameborder="0" id="iOverTimeLogin"></iframe>
+    </div>
+    <div data-options="region:'north',border:false,split:true" style="height: 60px;">
+        <div class="define-head">
+            <div class="define-logo">
+                <div id="LoginTopLine" style="font-family: 微软雅黑; ">浙江中财型材有限责任公司</div>
+                <div id="LoginBotoomLine" style="font-family: 微软雅黑; ">业务查询系统</div>
+            </div>
+            <div class="define-account">
+  @*         <span onclick="changeThemeFun('gray')" >Gray</span>
+    <span onclick="changeThemeFun('metro')" >Metro</span>
+     <span onclick="changeThemeFun('blue')" >Default</span>*@
+                <span><b> @ViewBag.UserName</b>欢迎您</span><br />
+                <a id="UpdatePwd" href="javascript:void(0)">修改密码</a> | <a href="/Account/Index">安全退出</a>
+            </div>
+
+        </div>
+    </div>
+    <div data-options="region:'west',split:true,title:'菜单列表'" style="width: 200px; height:100%; padding-top: 2px; background-color:#fff; overflow:auto">
+        @*        <div id="RightTree" style=" background-color:#fff;">
+            <div class="panel-loading">加载中...</div>
+        </div>*@
+    <div id="RightAccordion" class="easyui-accordion" ></div>
+    </div>
+    <div data-options="region:'south',border:false" style="height: 20px;">
+        <div class="define-bottom" style="text-align: center;">
+            <a id="ChangeSkin" class="pic_62" style="float: left;margin: 2px;" onclick="ChangSckin();"></a> <div style="margin: 0 auto;">Copyright ZCJT 2016</div>
+        </div>
+    </div>
+    <div data-options="region:'center',border:false">
+        <div id="mainTab" class="easyui-tabs" data-options="fit:true">
+            <div title="我的桌面" data-options="closable:true" style="overflow: hidden; background:#fff">
+                <iframe scrolling="auto" frameborder="0" src="" style="width: 100%; height: 100%;"></iframe>
+            </div>
+        </div>
+    </div>
+    <div id="tab_menu" class="easyui-menu" style="width: 150px;">
+        <div id="tab_menu-tabrefresh" data-options="iconCls:'icon-reload'">
+            刷新
+        </div>
+        @*<div id="tab_menu-openFrame">
+            在新的窗体打开
+        </div>*@
+        <div id="tab_menu-tabcloseall">
+            关闭所有
+        </div>
+        <div id="tab_menu-tabcloseother">
+            关闭其他标签页
+        </div>
+        <div class="menu-sep">
+        </div>
+        <div id="tab_menu-tabcloseright">
+            关闭右边
+        </div>
+        <div id="tab_menu-tabcloseleft">
+            关闭左边
+        </div>
+        <div id="tab_menu-tabclose" data-options="iconCls:'icon-remove'">
+            关闭
+        </div>
+        <div id="menu" class="easyui-menu" style="width: 150px;">
+        </div>
+    </div>
+    <div id="popupwindow" class="easyui-window" data-options="modal:true,closed:true,minimizable:false,shadow:false"></div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{84706F1F-5072-4CDA-8561-982CAFA588CC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZCJT.Core</RootNamespace>
+    <AssemblyName>ZCJT.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\我的文档\Visual Studio 2012\Projects\AppSolution\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DependencyRegisterType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnityDependencyResolver.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZCJT.BLL.Core\ZCJT.BLL.Core.csproj">
+      <Project>{e4f077f6-45ae-40b0-9c42-6776dca4973f}</Project>
+      <Name>ZCJT.BLL.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.BLL\ZCJT.BLL.csproj">
+      <Project>{041d8d3b-4ac5-4fd0-8c15-8fb736e2425c}</Project>
+      <Name>ZCJT.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.DAL\ZCJT.DAL.csproj">
+      <Project>{06d0a20b-cadf-4b04-830b-7155d2c8ff98}</Project>
+      <Name>ZCJT.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.IBLL\ZCJT.IBLL.csproj">
+      <Project>{278fd1d2-d316-461a-ae92-81faa03f9e77}</Project>
+      <Name>ZCJT.IBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.IDAL\ZCJT.IDAL.csproj">
+      <Project>{243e423d-8ff2-4d48-bb73-47b9f3f12686}</Project>
+      <Name>ZCJT.IDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.MIS.BLL\ZCJT.MIS.BLL.csproj">
+      <Project>{32662d3e-dd5a-4370-8c80-e4a2414fa768}</Project>
+      <Name>ZCJT.MIS.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.MIS.DAL\ZCJT.MIS.DAL.csproj">
+      <Project>{ff5f6deb-b5b8-446b-b8a6-3fbc469a5f3a}</Project>
+      <Name>ZCJT.MIS.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.MIS.IBLL\ZCJT.MIS.IBLL.csproj">
+      <Project>{93ca6179-9768-4640-9576-acb0c777ea17}</Project>
+      <Name>ZCJT.MIS.IBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ZCJT.MIS.IDAL\ZCJT.MIS.IDAL.csproj">
+      <Project>{a03f5872-8a0f-4a85-a4a3-d1509481a069}</Project>
+      <Name>ZCJT.MIS.IDAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

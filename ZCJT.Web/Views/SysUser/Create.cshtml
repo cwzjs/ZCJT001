@@ -1,0 +1,396 @@
+﻿@model ZCJT.Models.Sys.SysUserModel
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@using ZCJT.Web;
+@{
+    ViewBag.Title = "创建";
+    Layout = "~/Views/Shared/_Index_LayoutEdit.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+
+@*添加对uploadify控件的支持*@
+<script src="~/Scripts/uploadify/jquery.uploadify.min.js"></script>
+<link href="~/Scripts/uploadify/uploadify.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSave").click(function () {
+            if ($("form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Create")",
+                    type: "Post",
+                    data: $("form").serialize(),
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.type == 1) {
+                            window.parent.frameReturnByMes(data.message);
+                            window.parent.frameReturnByReload(true);
+                            window.parent.frameReturnByClose()
+                        }
+                        else {
+                            window.parent.frameReturnByMes(data.message);
+                        }
+                    }
+                });
+            }
+            return false;
+        });
+        $("#btnReturn").click(function () {
+            window.parent.frameReturnByClose();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        //添加界面的附件管理
+        $('#file_upload').uploadify({
+            'swf': '/Scripts/uploadify/uploadify.swf',  //FLash文件路径
+            'buttonText': '浏  览',                                 //按钮文本
+            'uploader': '/FileUpload/Upload',                       //处理文件上传Action
+            'queueID': 'fileQueue',                        //队列的ID
+            'queueSizeLimit': 10,                          //队列最多可上传文件数量，默认为999
+            'auto': false,                                 //选择文件后是否自动上传，默认为true
+            'multi': true,                                 //是否为多选，默认为true
+            'removeCompleted': true,                       //是否完成后移除序列，默认为true
+            'fileSizeLimit': '10MB',                       //单个文件大小，0为无限制，可接受KB,MB,GB等单位的字符串值
+            'fileTypeDesc': 'Image Files',                 //文件描述
+            'fileTypeExts': '*.gif; *.jpg; *.png; *.bmp;*.tif;*.doc;*.xls;*.zip',  //上传的文件后缀过滤器
+            'onQueueComplete': function (event, data) {                 //所有队列完成后事件
+                //ShowUpFiles($("#Attachment_GUID").val(), "div_files");  //完成后更新已上传的文件列表
+                $.messager.alert("提示", "上传完毕！");                                     //提示完成           
+            },
+            'onUploadStart': function (file) {
+                $("#file_upload").uploadify("settings", 'formData', { 'folder': '政策法规', 'guid': $("#Attachment_GUID").val() }); //动态传参数
+            },
+            'onUploadError': function (event, queueId, fileObj, errorObj) {
+                //alert(errorObj.type + "：" + errorObj.info);
+            }
+        });
+    });
+</script>
+
+<div class="mvctool bgb">
+    @Html.ToolButton("btnSave", "icon-save", "保存", perm, "Save", true)
+    @Html.ToolButton("btnReturn", "icon-return", "返回", false)
+</div>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+    <input id="CreateTime" type="hidden" name="CreateTime" value="2000-1-1" />
+    <table class="fromEditTable setTextWidth300">
+        <tbody>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.UserName)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.UserName)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.UserName)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.Password)：
+                </td>
+                <td style="width: 310px">
+                    @*@Html.EditorFor(model => model.Password)*@
+                    @Html.PasswordFor(model=>model.Password)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Password)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.TrueName)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.TrueName)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.TrueName)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.Card)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.Card)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Card)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.MobileNumber)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.MobileNumber)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.MobileNumber)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.PhoneNumber)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.PhoneNumber)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.PhoneNumber)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.QQ)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.QQ)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.QQ)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.EmailAddress)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.EmailAddress)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.EmailAddress)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.OtherContact)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.OtherContact)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.OtherContact)</td>
+            </tr>
+            @*<tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.Province)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.Province)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Province)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.City)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.City)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.City)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.Village)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.Village)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Village)</td>
+            </tr>*@
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.Address)：
+                </td>
+                <td style="width: 310px">
+                    @Html.EditorFor(model => model.Address)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.Address)</td>
+            </tr>
+            <tr>
+                <td style="width: 100px; text-align: right;">
+                    @Html.LabelFor(model => model.State)：
+                </td>
+                <td style="width: 310px">
+                    @Html.CheckBoxFor(model => model.State, new { @checked = true })
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.State)</td>
+            </tr>
+            @*<tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.CreatePerson)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.CreatePerson)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.CreatePerson)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Sex)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Sex)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Sex)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Birthday)：
+        </td>
+        <td style="width: 310px">
+            @Html.TextBox("Birthday", "",
+        new { @class = "easyui-datebox" })
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Birthday)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.JoinDate)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.JoinDate)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.JoinDate)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Marital)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Marital)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Marital)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Political)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Political)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Political)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Nationality)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Nationality)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Nationality)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Native)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Native)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Native)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.School)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.School)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.School)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Professional)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Professional)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Professional)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Degree)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Degree)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Degree)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.DepId)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.DepId)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.DepId)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.PosId)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.PosId)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.PosId)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Expertise)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Expertise)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Expertise)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.JobState)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.JobState)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.JobState)</td>
+    </tr>
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Photo)：
+        </td>
+        <td style="width: 310px">
+            @Html.HiddenFor(model => model.Photo)
+            <img class="expic" src="/Content/Images/NotPic.jpg" /><br />
+            <a href="javascript:$('#FileUpload').trigger('click');" class="files">
+                <input type="file" size="10" value="" id="FileUpload" name="FileUpload" onchange="Upload('SingleFile', 'Photo', 'FileUpload','1','1');" />
+            </a><span class="uploading">请稍候...</span>
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Photo)</td>
+    </tr>
+
+    <tr>
+        <th>
+            <label for="Attachment_GUID">附件上传：</label>
+        </th>
+        <td>
+            <div>
+                <input class="easyui-validatebox" type="hidden" id="Attachment_GUID" name="Attachment_GUID" />
+                <input id="file_upload" name="file_upload" type="file" multiple="multiple">
+                <a href="javascript:void(0)" class="easyui-linkbutton" id="btnUpload" data-options="plain:true,iconCls:'icon-save'"
+                    onclick="javascript: $('#file_upload').uploadify('upload', '*')">上传</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" id="btnCancelUpload" data-options="plain:true,iconCls:'icon-cancel'"
+                    onclick="javascript: $('#file_upload').uploadify('cancel', '*')">取消</a>
+
+                <div id="fileQueue" class="fileQueue"></div>
+                <div id="div_files"></div>
+                <br />
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td style="width: 100px; text-align: right;">
+            @Html.LabelFor(model => model.Attach)：
+        </td>
+        <td style="width: 310px">
+            @Html.EditorFor(model => model.Attach)
+        </td>
+        <td>@Html.ValidationMessageFor(model => model.Attach)</td>
+    </tr>
+            *@
+        </tbody>
+    </table>
+}

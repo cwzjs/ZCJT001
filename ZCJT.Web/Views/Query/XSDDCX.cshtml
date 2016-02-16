@@ -1,0 +1,218 @@
+﻿@using ZCJT.Web;
+@using ZCJT.Common;
+@using ZCJT.Models.Sys;
+@{
+    ViewBag.Title = "销售订单查询";
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+    List<PermModel> perm = (List<PermModel>)ViewBag.Perm;
+    if (perm == null)
+    {
+        perm = new List<PermModel>();
+    }
+}
+
+ 
+ 
+<div class="mvctool"  >
+    <form id="ddcxt-listquery-from">
+        <table>
+            <tr>
+                <td>日期：</td>
+                <td>
+                    <input type="text" id="ddcx-date1" name="date1" style="width:100px;" class="Wdate" onfocus="WdatePicker({'dateFmt':'yyyy-MM-dd' })" />  -
+                    <input type="text" id="ddcx-date2" name="date2" class="Wdate" style="width:100px;" onfocus="WdatePicker({'dateFmt':'yyyy-MM-dd'})" />
+                </td>
+                <td style="padding-left:6px;">  业务员：</td>
+                <td>
+                    @*<select class="easyui-combobox" name="state" style="width:120px;"></select>*@
+                    <select id="ddcx-ywy" name="ywy" class="easyui-combogrid" style="width:160px" data-options="
+			     panelWidth: 300,
+			     idField: 'bh',
+		     	 textField: 'mc',
+			     url : 'GetComboxZWzgzd',
+			     method: 'get',
+                 editable:false,
+			     columns: [[
+				      {field:'bh',title:'编号',width:90},
+				      {field:'mc',title:'名称',width:200}
+			               ]],
+			     fitColumns: true
+		       "></select>
+                </td>
+                <td style="padding-left:6px;">  订单编号：</td>
+                <td><input id="ddcx-txtddbh" name="ddbh" type="text" class="searchText" /></td>
+                <td>
+                    @Html.ToolButton("btnQuery", "icon-search", "查询", true)
+                    @*@Html.ToolButton("btnExport", "icon-export", "导出", true)*@
+                    @Html.ToolButton("btnQueryReset", "icon-reload", "重置", true)
+                    @*<a id="icon-export" href="#" class="easyui-splitbutton" data-options="menu:'#dropdown',iconCls:'icon-download'">导出</a>*@
+                </td>
+
+            </tr>
+            <tr>
+                <td style="padding-left:6px;">  订单编号：</td>
+                <td><input id="ddcx-txtddbh" name="ddbh" type="text" class="searchText" /></td>
+                </tr>
+</table>
+    </form>
+        <div id="dropdown" style="width:100px; display:none;">
+            <div data-options="iconCls:'icon-ext-xls'" suffix="xls" data-bind="click:downloadClick">Excel2003   </div>
+            <div data-options="iconCls:'icon-page_excel'" suffix="xlsx" data-bind="click:downloadClick">Excel2007   </div>
+            <div data-options="iconCls:'icon-ext-doc'" suffix="doc" data-bind="click:downloadClick">Word2003    </div>
+        </div>
+</div>
+<table id="List"></table>
+
+<div id="modalwindow" class="easyui-window" data-options="modal:true,closed:true,minimizable:false,shadow:false"></div>
+@Html.Partial("~/Views/Shared/_Partial_AutoGrid.cshtml")
+<script type="text/javascript"> 
+
+    $(function () {
+        $('#List').datagrid({
+           // url: '@Url.Action("GetXSDDCX")',
+            width: $(window).width() - 10,
+            methord: 'post',
+            height: $(window).height() - 35,
+            fitColumns: true,
+            sortName: 'ddbh',
+            sortOrder: 'desc',
+            idField: 'id',
+            pageSize: 50,
+            pageList: [50, 100, 150],
+            pagination: true,
+            striped: true, //奇偶行是否区分
+            singleSelect: true,//单选模式
+            rownumbers: true,//行号
+            columns: [[
+                { field: 'id', title: 'id',   hidden: true },
+                { field: 'ddbh', title: '订单编号'  },
+                { field: 'ddkh', title: '订单客户'  },
+                { field: 'ddbm', title: '订单部门'},
+                { field: 'ddywy', title: '订单业务员' },
+                { field: 'jhrq', title: '交货日期' },
+                { field: 'ccts', title: '超储天数' },
+                { field: 'wlbh', title: '物料编号' },
+                { field: 'wlmc', title: '物料名称' },
+                { field: 'ggxh', title: '规格型号' },
+                { field: 'ddsl', title: '订单数量' },
+                { field: 'dqzt', title: '当前状态' },
+                { field: 'pcjt', title: '排产机台' },
+                { field: 'ddrksl', title: '订单入库数量' },
+                { field: 'ddrkrq', title: '订单入库日期' },
+                { field: 'ddkdsl', title: '订单开单数量' },
+                { field: 'ddfysl', title: '订单发运数量' },
+                { field: 'fyrq', title: '发运日期' },
+                { field: 'fycph', title: '发运车牌号' },
+                { field: 'sjphone', title: '司机电话' }
+            ]]
+        });
+    });
+    //ifram 返回
+    function frameReturnByClose() {
+        $("#modalwindow").window('close');
+    }
+    function frameReturnByReload(flag) {
+        if (flag)
+            $("#List").datagrid('load');
+        else
+            $("#List").datagrid('reload');
+    }
+    function frameReturnByMes(mes) {
+        $.messageBox5s('提示', mes);
+    }
+    $(function () {
+        $("#btnExport").click(function () {
+            //$("#modalwindow").html("<iframe width='100%' height='98%' scrolling='no' frameborder='0'' src='/SysHelper/ReportControl'></iframe>");
+            //$("#modalwindow").window({ title: '导出', width: 320, height: 200, iconCls: 'icon-add' }).window('open');
+            //获取Datagride的列  
+            var rows = $('#List').datagrid('getRows');
+            var columns = $("#List").datagrid("options").columns[0];
+            debugger;
+        
+
+             var oXL = new ActiveXObject("Excel.Application"); //创建AX对象excel   
+            var oWB = oXL.Workbooks.Add(); //获取workbook对象   
+            var oSheet = oWB.ActiveSheet; //激活当前sheet  
+            //设置工作薄名称  
+            oSheet.name = "导出Excel报表";
+            //设置表头  
+            debugger;
+            for (var i = 0; i < columns.length; i++) {
+                oSheet.Cells(1, i + 1).value = columns[i].title;
+            }
+            //设置内容部分  
+            for (var i = 0; i < rows.length; i++) {
+                //动态获取每一行每一列的数据值  
+                for (var j = 0; j < columns.length; j++) {
+                    oSheet.Cells(i + 2, j + 1).value = rows[i][columns[j].field];
+                }
+            }
+            oXL.Visible = true; //设置excel可见属性 
+        });
+ 
+
+        @*$("#btnQuery").click(function () {
+            debugger;
+            var date1 = $('#date1').val();
+            if (date1 == null || date1 == "") {
+                alert("请输入开始日期！");
+            }
+
+            var date2 = $('#date2').val();
+            if (date2 == null || date2 == "") {
+                alert("请输入结束日期！");
+            }
+            var ywy = $('#ywy').combogrid('getValue');
+            if (ywy == null) {
+                ywy = "";
+            }
+            var txtddbh = $("#txtddbh").val()
+            if (txtddbh == null) {
+                txtddbh = "";
+            }
+            debugger;
+            //传入参数 
+            $('#List').datagrid({
+                url: '@Url.Action("GetXSDDCX")?date1=' + encodeURI(date1) + "&date2=" + encodeURI(date2) + "&ywy=" + encodeURI(ywy)
+                + "&txtddbh=" + encodeURI(txtddbh)
+            });*@ 
+
+        $("#btnQuery").click(function () { 
+             
+            //序列化成object
+            var queryJSON = $("#ddcxt-listquery-from").serializeJSON();
+            //  $("#List").datagrid('load', queryJSON); 
+
+            $("#List").datagrid({
+                url: '@Url.Action("GetXSDDCX")',
+                pageNumber: 1,
+                queryParams: queryJSON
+            });
+        });
+
+
+        $("#btnQueryReset").click(function () {
+            //后加载的话，重置使用重置方法二
+
+            //方法一   
+            $("#ddcxt-listquery-from").form("reset");
+            //方法二   
+          //  $("#ddcxt-listquery-from")[0].reset();
+
+            //重置方法一
+            //重置方法一 开始
+            //var queryJSON = $("#ddcxt-listquery-from").serializeJSON();
+            //$("#List").datagrid('load', queryJSON);
+            //重置方法一 结束
+
+            //重置方法二 
+            $("#List").datagrid('loadData', { total: 0, rows: [] });
+
+        });
+
+        //查询时，注册回车事件 ALT+Q 查询，ALT+R 重置
+      //  controlQueryAndResetByKey("btnQuery", "btnQueryReset");
+
+    });
+</script>
+
