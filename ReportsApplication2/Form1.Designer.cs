@@ -29,36 +29,36 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Microsoft.Reporting.WinForms.ReportDataSource reportDataSource1 = new Microsoft.Reporting.WinForms.ReportDataSource();
-            this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
-            this.cwbase5DataSet = new ReportsApplication2.cwbase5DataSet();
+            Microsoft.Reporting.WinForms.ReportDataSource reportDataSource4 = new Microsoft.Reporting.WinForms.ReportDataSource();
             this.XSTDBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.cwbase5DataSet = new ReportsApplication2.cwbase5DataSet();
+            this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
             this.XSTDTableAdapter = new ReportsApplication2.cwbase5DataSetTableAdapters.XSTDTableAdapter();
-            ((System.ComponentModel.ISupportInitialize)(this.cwbase5DataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.XSTDBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cwbase5DataSet)).BeginInit();
             this.SuspendLayout();
             // 
-            // reportViewer1
+            // XSTDBindingSource
             // 
-            this.reportViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            reportDataSource1.Name = "DataSet1";
-            reportDataSource1.Value = this.XSTDBindingSource;
-            this.reportViewer1.LocalReport.DataSources.Add(reportDataSource1);
-            this.reportViewer1.LocalReport.ReportEmbeddedResource = "ReportsApplication2.Report1.rdlc";
-            this.reportViewer1.Location = new System.Drawing.Point(0, 0);
-            this.reportViewer1.Name = "reportViewer1";
-            this.reportViewer1.Size = new System.Drawing.Size(819, 431);
-            this.reportViewer1.TabIndex = 0;
+            this.XSTDBindingSource.DataMember = "XSTD";
+            this.XSTDBindingSource.DataSource = this.cwbase5DataSet;
             // 
             // cwbase5DataSet
             // 
             this.cwbase5DataSet.DataSetName = "cwbase5DataSet";
             this.cwbase5DataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // XSTDBindingSource
+            // reportViewer1
             // 
-            this.XSTDBindingSource.DataMember = "XSTD";
-            this.XSTDBindingSource.DataSource = this.cwbase5DataSet;
+            this.reportViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            reportDataSource4.Name = "DataSet1";
+            reportDataSource4.Value = this.XSTDBindingSource;
+            this.reportViewer1.LocalReport.DataSources.Add(reportDataSource4);
+            this.reportViewer1.LocalReport.ReportEmbeddedResource = "ReportsApplication2.Report1.rdlc";
+            this.reportViewer1.Location = new System.Drawing.Point(0, 0);
+            this.reportViewer1.Name = "reportViewer1";
+            this.reportViewer1.Size = new System.Drawing.Size(819, 431);
+            this.reportViewer1.TabIndex = 0;
             // 
             // XSTDTableAdapter
             // 
@@ -73,8 +73,8 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.cwbase5DataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.XSTDBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cwbase5DataSet)).EndInit();
             this.ResumeLayout(false);
 
         }

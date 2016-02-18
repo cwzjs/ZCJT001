@@ -23,6 +23,8 @@ namespace ReportsApplication2
             this.XSTDTableAdapter.Fill(this.cwbase5DataSet.XSTD);
             this.reportViewer1.RefreshReport();
             this.reportViewer2.RefreshReport();
+            this.reportViewer2.RefreshReport();
+            this.reportViewer2.RefreshReport();
         }
     }
 }

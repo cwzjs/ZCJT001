@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZCJT.Web", "ZCJT.Web\ZCJT.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZCJT.Models", "ZCJT.Models\ZCJT.Models.csproj", "{92F41533-48D6-4B78-8B41-F8C652ADEB7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsApplication2", "ReportsApplication2\ReportsApplication2.csproj", "{616948F8-3715-437B-B433-CFC3FAC4A877}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrystalReportsApplication1", "CrystalReportsApplication1\CrystalReportsApplication1.csproj", "{8F862DCF-1295-4C35-B767-4A26F3A9AF01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,10 +99,10 @@ Global
 		{92F41533-48D6-4B78-8B41-F8C652ADEB7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92F41533-48D6-4B78-8B41-F8C652ADEB7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92F41533-48D6-4B78-8B41-F8C652ADEB7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{616948F8-3715-437B-B433-CFC3FAC4A877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{616948F8-3715-437B-B433-CFC3FAC4A877}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{616948F8-3715-437B-B433-CFC3FAC4A877}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{616948F8-3715-437B-B433-CFC3FAC4A877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F862DCF-1295-4C35-B767-4A26F3A9AF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F862DCF-1295-4C35-B767-4A26F3A9AF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F862DCF-1295-4C35-B767-4A26F3A9AF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F862DCF-1295-4C35-B767-4A26F3A9AF01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
